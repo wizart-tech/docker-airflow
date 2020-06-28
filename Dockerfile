@@ -16,8 +16,7 @@ ARG AIRFLOW_DATA_PATH=/usr/local/airflow_data
 ARG AIRFLOW_EXTRA_DEPS=""
 ARG SYSTEM_EXTRA_DEPS=""
 
-RUN set -ex \
-    && apt-get update -yqq \
+RUN apt-get update -yqq \
     && apt-get upgrade -yqq \
     && apt-get install -yqq --no-install-recommends \
         build-essential \
@@ -37,29 +36,26 @@ RUN set -ex \
         libffi-dev \
         libkrb5-dev \
         ${SYSTEM_EXTRA_DEPS} \
-    && update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 \
     && useradd --shell /bin/bash --create-home --home ${AIRFLOW_HOME} airflow \
     && pip install -U pip setuptools wheel \
-    && pip install ndg-httpsclient pytz pyOpenSSL pyasn1 ipython psycopg2-binary \
+    && pip install ndg-httpsclient pytz pyOpenSSL pyasn1 typing-extensions ipython psycopg2-binary \
     && pip install apache-airflow[async,aws,crypto,mysql,postgres,password,ssh${AIRFLOW_EXTRA_DEPS:+,}${AIRFLOW_EXTRA_DEPS}]==${AIRFLOW_VERSION} \
     && apt-get autoremove -yqq --purge \
     && apt-get clean \
     && rm -rf \
         /var/lib/apt/lists/* \
         /var/tmp/* \
-        /tmp/* \
+        /tmp/*
 
 COPY entrypoint.sh ${AIRFLOW_HOME}/entrypoint.sh
 COPY airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
-COPY requirements.txt ${AIRFLOW_HOME}/requirements.txt
 
-RUN FERNET_KEY=$(python -c "from cryptography.fernet import Fernet; FERNET_KEY = Fernet.generate_key().decode(); print FERNET_KEY") \
-    && sed -i "s/#FERNET_KEY#/${FERNET_KEY}/" ${AIRFLOW_HOME}/airflow.cfg
-RUN sed -i "s:#AIRFLOW_HOME#:${AIRFLOW_HOME}:" ${AIRFLOW_HOME}/airflow.cfg
+RUN FERNET_KEY=$(python -c "from cryptography.fernet import Fernet; FERNET_KEY = Fernet.generate_key().decode(); print(FERNET_KEY)") \
+    && sed -i "s|{FERNET_KEY}|${FERNET_KEY}|g" ${AIRFLOW_HOME}/airflow.cfg \
+    && sed -i "s|{AIRFLOW_HOME}|${AIRFLOW_HOME}|g" ${AIRFLOW_HOME}/airflow.cfg
 RUN mkdir -p ${AIRFLOW_HOME}/logs && mkdir -p ${AIRFLOW_HOME}/dags && mkdir -p ${AIRFLOW_DATA_PATH}
 RUN chown -R airflow: ${AIRFLOW_HOME} && chown -R airflow: ${AIRFLOW_DATA_PATH}
 RUN chmod +x ${AIRFLOW_HOME}/entrypoint.sh
-RUN pip install --no-cache-dir -r ${AIRFLOW_HOME}/requirements.txt
 
 WORKDIR ${AIRFLOW_HOME}
 
