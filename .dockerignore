@@ -1,0 +1,7 @@
+.idea
+.git
+venv/
+data/
+README.md
+Makefile
+*.py[cod]
