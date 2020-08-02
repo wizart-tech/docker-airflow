@@ -1,5 +1,6 @@
 .idea
 venv/
+airflow.env
 __pycache__/
 data/
 *.py[cod]
