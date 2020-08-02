@@ -49,10 +49,8 @@ RUN apt-get update -yqq \
 
 COPY entrypoint.sh ${AIRFLOW_HOME}/entrypoint.sh
 COPY airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
+RUN sed -i "s|{AIRFLOW_HOME}|${AIRFLOW_HOME}|g" ${AIRFLOW_HOME}/airflow.cfg
 
-RUN FERNET_KEY=$(python -c "from cryptography.fernet import Fernet; FERNET_KEY = Fernet.generate_key().decode(); print(FERNET_KEY)") \
-    && sed -i "s|{FERNET_KEY}|${FERNET_KEY}|g" ${AIRFLOW_HOME}/airflow.cfg \
-    && sed -i "s|{AIRFLOW_HOME}|${AIRFLOW_HOME}|g" ${AIRFLOW_HOME}/airflow.cfg
 RUN mkdir -p ${AIRFLOW_HOME}/logs && mkdir -p ${AIRFLOW_HOME}/dags && mkdir -p ${AIRFLOW_DATA_PATH}
 RUN chown -R airflow: ${AIRFLOW_HOME} && chown -R airflow: ${AIRFLOW_DATA_PATH}
 RUN chmod +x ${AIRFLOW_HOME}/entrypoint.sh

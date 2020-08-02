@@ -18,6 +18,8 @@ services:
     restart: always
     depends_on:
       - postgres
+    env_file:
+      - ./airflow.env
     volumes:
       - ./airflow/dags:/usr/local/airflow/dags
       - ./airflow/logs:/usr/local/airflow/logs
