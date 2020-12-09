@@ -1,5 +1,5 @@
 FROM python:3.8-slim-buster
-LABEL maintainer="Artur Kuchynski <artur.kuchynski@gmail.com>" \
+LABEL maintainer="Artur Kuchynski <arturkuchynski@gmail.com>" \
     description="Dockerized Apache Airflow"
 
 ENV DEBIAN_FRONTEND noninteractive
