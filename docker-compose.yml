@@ -21,6 +21,7 @@ services:
     volumes:
       - ./airflow/dags:/usr/local/airflow/dags
       - ./airflow/logs:/usr/local/airflow/logs
+      - ./airflow/plugins:/usr/local/airflow/plugins
       - ./data/webserver:/usr/local/airflow_data
     ports:
       - 8080:8080
