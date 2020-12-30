@@ -39,7 +39,7 @@ RUN apt-get update -yqq \
     && useradd --shell /bin/bash --create-home --home ${AIRFLOW_HOME} airflow \
     && pip install -U pip setuptools wheel \
     && pip install ndg-httpsclient pytz pyOpenSSL pyasn1 typing-extensions ipython psycopg2-binary \
-    && pip install apache-airflow[async,aws,crypto,mysql,postgres,password,ssh${AIRFLOW_EXTRA_DEPS:+,}${AIRFLOW_EXTRA_DEPS}]==${AIRFLOW_VERSION} \
+    && pip install apache-airflow[async,aws,crypto,mysql,postgres,password,ssh,celery${AIRFLOW_EXTRA_DEPS:+,}${AIRFLOW_EXTRA_DEPS}]==${AIRFLOW_VERSION} \
     && apt-get autoremove -yqq --purge \
     && apt-get clean \
     && rm -rf \
