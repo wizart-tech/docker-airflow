@@ -11,7 +11,7 @@ ENV GUNICORN_CMD_ARGS --log-level WARNING
 ARG AIRFLOW_HOME=/usr/local/airflow
 ENV AIRFLOW_HOME=${AIRFLOW_HOME}
 
-ARG AIRFLOW_VERSION=1.10.13
+ARG AIRFLOW_VERSION=1.10.14
 ARG AIRFLOW_DATA_PATH=/usr/local/airflow_data
 ARG AIRFLOW_EXTRA_DEPS=""
 ARG SYSTEM_EXTRA_DEPS=""
@@ -38,7 +38,7 @@ RUN apt-get update -yqq \
         ${SYSTEM_EXTRA_DEPS} \
     && useradd --shell /bin/bash --create-home --home ${AIRFLOW_HOME} airflow \
     && pip install -U pip setuptools wheel \
-    && pip install ndg-httpsclient pytz pyOpenSSL pyasn1 typing-extensions ipython psycopg2-binary cattrs==1.0.0 \
+    && pip install ndg-httpsclient pytz pyOpenSSL pyasn1 typing-extensions ipython psycopg2-binary \
     && pip install apache-airflow[async,aws,crypto,mysql,postgres,password,ssh${AIRFLOW_EXTRA_DEPS:+,}${AIRFLOW_EXTRA_DEPS}]==${AIRFLOW_VERSION} \
     && apt-get autoremove -yqq --purge \
     && apt-get clean \
