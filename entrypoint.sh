@@ -6,7 +6,8 @@ fi
 
 case "$1" in
   webserver)
-    airflow initdb
+    airflow db init
+#    airflow db upgrade
     airflow scheduler &
     exec airflow webserver
     ;;
