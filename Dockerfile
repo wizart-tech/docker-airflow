@@ -16,10 +16,8 @@ ENV AIRFLOW_HOME=${AIRFLOW_HOME}
 
 ARG AIRFLOW_VERSION=2.0.0
 ARG AIRFLOW_DATA_PATH=/usr/local/airflow_data
-ARG AIRFLOW_EXTRA_DEPS=""
-ARG SYSTEM_EXTRA_DEPS=""
 
-RUN apt-get update -yqq \
+RUN apt-get update -qq \
     && apt-get upgrade -yqq \
     && apt-get install -yqq --no-install-recommends \
         build-essential \
@@ -38,11 +36,10 @@ RUN apt-get update -yqq \
         libssl-dev \
         libffi-dev \
         libkrb5-dev \
-        ${SYSTEM_EXTRA_DEPS} \
     && useradd --shell /bin/bash --create-home --home ${AIRFLOW_HOME} airflow \
     && pip install -U pip setuptools wheel \
     && pip install ndg-httpsclient pytz pyOpenSSL pyasn1 typing-extensions ipython psycopg2-binary \
-    && pip install apache-airflow[async,aws,crypto,mysql,postgres,password,ssh,celery${AIRFLOW_EXTRA_DEPS:+,}${AIRFLOW_EXTRA_DEPS}]==${AIRFLOW_VERSION} \
+    && pip install apache-airflow[async,aws,crypto,mysql,postgres,password,ssh,celery]==${AIRFLOW_VERSION} \
     && apt-get autoremove -yqq --purge \
     && apt-get clean \
     && rm -rf \
