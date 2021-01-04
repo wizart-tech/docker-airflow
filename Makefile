@@ -4,6 +4,7 @@ SHELL=/bin/bash
 help:
 	@echo 'make ps               list containers.'
 	@echo 'make build            build an image from a Dockerfile.'
+	@echo 'make push             push an image to a registry.'
 	@echo 'make up               build, (re)create, start, and attach to containers for a service.'
 	@echo 'make down             stop and remove containers, networks, volumes, and images created by up.'
 	@echo 'make restart          restart all stopped and running services.'
@@ -15,7 +16,8 @@ help:
 
 
 ps: docker-ps
-build:docker-build
+build: docker-build
+push: docker-push
 up: docker-up
 down: docker-down
 restart: docker-down docker-up
@@ -24,7 +26,10 @@ docker-ps:
 	docker-compose ps
 
 docker-build:
-	docker-compose build
+	docker build --pull --file=Dockerfile --tag=${REGISTRY_PATH}:${IMAGE_TAG} .
+
+docker-push:
+	docker push ${REGISTRY_PATH}:${IMAGE_TAG}
 
 docker-up:
 	docker-compose up -d --build
