@@ -1,4 +1,9 @@
-# Dockerized Apache Airflow with LocalExecutor and Postgres Backend.
+# Dockerized Apache Airflow with Postgres Backend.
+
+This Docker image contains Airflow 2.0 with minimal dependencies which makes the image lighter and more customizable.
+
+All the docker-compose*.yml examples were developed taking into account all the best practices
+that are used for deploying docker containers in our company - [Wizart Tech](https://wizart.ai/).
 
 ### Prerequisites
 
@@ -6,18 +11,23 @@
 - Install [Docker Compose](https://docs.docker.com/compose/install/)
 - Follow Apache Airflow Principles and How-To Guides in [Docs](https://airflow.apache.org/docs/stable/)
 
+### Supported Executors
+- LocalExecutor
+- CeleryExecutor
+
 ### Security
-In order to secure Airflow Connections and Variables, generate `fernet_key`. It can be done using Python:
+1) In order to secure Airflow Connections and Variables, use `fernet_key` encryption. It can be done using Python:
 
-```python
->> from cryptography.fernet import Fernet
->> Fernet.generate_key().decode()
-'=69ksvvORDpeoBrz2N38El18kOxJFPU2peg22So66k7U=' # here is your fernet key
-```
-Specify the `secret_key` setting under the `[webserver]` config. 
-Change this value to a new, per-environment, randomly generated string.
+    ```python
+    >> from cryptography.fernet import Fernet
+    >> Fernet.generate_key().decode()
+    '=69ksvvORDpeoBrz2N38El18kOxJFPU2peg22So66k7U=' # here is your fernet key
+    ```
+   
+2) Specify the `secret_key` setting under the `[webserver]` config. 
+    Change this value to a new, per-environment, randomly generated string.
 
-For example using this command `openssl rand -hex 30`
+    For example using this command `openssl rand -hex 30`
 
 Store the generated keys in **env_file** and name It `airflow.env`, just like It shown below:
 ```bash
@@ -42,7 +52,7 @@ make help
 ### Create Users
 
 ```bash
-docker-compose run --rm webserver bash  # or make shell-root
+docker-compose run --rm webserver bash  # or `make shell-root`
 airflow users create \
     --role Admin \
     --username admin \
@@ -55,10 +65,7 @@ airflow users create \
 
 If you want to run any of airflow commands, you can do the following:  `docker-compose run --rm webserver [some command]`
 
-- `docker-compose run --rm webserver airflow list_dags` - List dags
-- `docker-compose run --rm webserver airflow test [DAG_ID] [TASK_ID] [EXECUTION_DATE]` - Test specific task
+- `docker-compose run --rm webserver airflow dags list` - List dags
+- `docker-compose run --rm webserver airflow tasks test [DAG_ID] [TASK_ID] [EXECUTION_DATE]` - Test specific task
 - `docker-compose run --rm webserver python /usr/local/airflow/dags/[PYTHON-FILE].py` - Test custom python script
-
-## TODO
-- Celery Executor
 
