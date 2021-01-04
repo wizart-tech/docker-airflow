@@ -19,6 +19,7 @@ services:
     restart: always
     depends_on:
       - postgres
+      - redis
     env_file:
       - ./airflow.env
     volumes:
