@@ -14,6 +14,7 @@ services:
     image: redis:6.0.0
 
   webserver:
+    image: wizarttech/docker-airflow:latest
     build:
       context: .
     restart: always
@@ -36,7 +37,7 @@ services:
       retries: 3
 
   scheduler:
-    image: wizart/docker-airflow:latest
+    image: wizarttech/docker-airflow:latest
     build:
       context: .
     restart: always
@@ -51,7 +52,7 @@ services:
     command: scheduler
 
   worker:
-    image: wizart/docker-airflow:latest
+    image: wizarttech/docker-airflow:latest
     build:
       context: .
     restart: always
@@ -66,7 +67,7 @@ services:
     command: worker
 
   flower:
-    image: wizart/docker-airflow:latest
+    image: wizarttech/docker-airflow:latest
     build:
       context: .
     restart: always
