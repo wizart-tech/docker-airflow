@@ -15,8 +15,8 @@ services:
 
   webserver:
     image: wizarttech/docker-airflow:latest
-    build:
-      context: .
+#    build:
+#      context: .
     restart: always
     depends_on:
       - postgres
@@ -38,8 +38,8 @@ services:
 
   scheduler:
     image: wizarttech/docker-airflow:latest
-    build:
-      context: .
+#    build:
+#      context: .
     restart: always
     depends_on:
       - webserver
@@ -53,8 +53,8 @@ services:
 
   worker:
     image: wizarttech/docker-airflow:latest
-    build:
-      context: .
+#    build:
+#      context: .
     restart: always
     depends_on:
       - scheduler
@@ -68,8 +68,8 @@ services:
 
   flower:
     image: wizarttech/docker-airflow:latest
-    build:
-      context: .
+#    build:
+#      context: .
     restart: always
     depends_on:
       - redis
