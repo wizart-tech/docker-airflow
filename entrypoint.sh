@@ -8,9 +8,13 @@ case "$1" in
     airflow scheduler &
     exec airflow webserver
     ;;
-  scheduler|worker)
+  scheduler)
     sleep 20
     exec airflow "$@"
+    ;;
+  worker|flower)
+    sleep 20
+    exec airflow celery "$@"
     ;;
   *)
     exec "$@"

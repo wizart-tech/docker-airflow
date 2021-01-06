@@ -15,8 +15,8 @@ services:
 
   webserver:
     image: wizarttech/docker-airflow:latest
-    build:
-      context: .
+#    build:
+#      context: .
     restart: always
     depends_on:
       - postgres
@@ -26,6 +26,7 @@ services:
     volumes:
       - ./airflow/dags:/usr/local/airflow/dags
       - ./airflow/logs:/usr/local/airflow/logs
+      - ./airflow/plugins:/usr/local/airflow/plugins
       - ./data/webserver:/usr/local/airflow_data
     ports:
       - 8080:8080
@@ -38,8 +39,8 @@ services:
 
   scheduler:
     image: wizarttech/docker-airflow:latest
-    build:
-      context: .
+#    build:
+#      context: .
     restart: always
     depends_on:
       - webserver
@@ -48,13 +49,14 @@ services:
     volumes:
       - ./airflow/dags:/usr/local/airflow/dags
       - ./airflow/logs:/usr/local/airflow/logs
+      - ./airflow/plugins:/usr/local/airflow/plugins
       - ./data/webserver:/usr/local/airflow_data
     command: scheduler
 
   worker:
     image: wizarttech/docker-airflow:latest
-    build:
-      context: .
+#    build:
+#      context: .
     restart: always
     depends_on:
       - scheduler
@@ -63,13 +65,14 @@ services:
     volumes:
       - ./airflow/dags:/usr/local/airflow/dags
       - ./airflow/logs:/usr/local/airflow/logs
+      - ./airflow/plugins:/usr/local/airflow/plugins
       - ./data/webserver:/usr/local/airflow_data
     command: worker
 
   flower:
     image: wizarttech/docker-airflow:latest
-    build:
-      context: .
+#    build:
+#      context: .
     restart: always
     depends_on:
       - redis
