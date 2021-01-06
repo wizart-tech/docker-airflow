@@ -11,8 +11,9 @@ services:
       - ./data/postgres:/var/lib/postgresql/data
 
   webserver:
-    build:
-      context: .
+    image: wizarttech/docker-airflow:latest
+#    build:
+#      context: .
     restart: always
     depends_on:
       - postgres
